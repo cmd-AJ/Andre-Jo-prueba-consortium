@@ -1,39 +1,56 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
-from .models import Notificacion
-from datetime import date, time
-from rest_framework.renderers import JSONRenderer
-from rest_framework import serializers
+from rest_framework.test import APIClient
+from unittest.mock import patch
+from rest_framework import status
 
-# Serializer para convertir el modelo a JSON
-class NotificacionSerializer(serializers.ModelSerializer):
-    recepcionista = serializers.StringRelatedField()
-    colaborador = serializers.StringRelatedField()
+class SingleAttributeTestCase(TestCase):
 
-    class Meta:
-        model = Notificacion
-        fields = '__all__'
+    def setUp(self):
+        self.client = APIClient()
+        self.url = '/echos/'  # The endpoint for testing
 
-class NotificacionTestCase(TestCase):
+    @patch('yourapp.views.notificationapi.send')  # Mock the external API call
+    def test_post_notification(self, mock_send):
+        data = {
+            "received_date": "2025-04-07",
+            "received_time": "09:45",
+            "issuing_entity": "Juzgado Primero Civil",
+            "case_number": "EXP-2025-04567",
+            "recipient": "Lic. Mariana López",
+            "receptionist": "Amanda González",
+            "internal_delivery_time": "10:15",
+            "internal_collaborator": ["Carlos Méndez"],
+            "final_delivery_datetime": ["2025-04-07T10:30:00"]
+        }
 
+        mock_send.return_value = {"status": "success", "message": "Notification sent successfully"}
 
-    def test_crear_notificacion(self):
-        notificacion = Notificacion.objects.create(
-        fecha_recepcion=date.today(),
-        hora_recepcion=time(9, 30),
-        entidad_emite='Juzgado Civil',
-        numero_cedula_expediente='EXP-000123',
-        dirigido_a='Lic. Mario López',
-        recepcionista="amanda",  # Asignar el usuario recepcionista
-        colaborador_nombre="juan",     # Asignar el colaborador
-        fecha_entrega=date.today(),
-        hora_entrega=time(10, 0)
-        )
+        response = self.client.post(self.url, data, format='json')
 
-        serializer = NotificacionSerializer(notificacion)
-        json_data = JSONRenderer().render(serializer.data)
-        print(json_data.decode('utf-8'))  # Mostrar el JSON de la notificación
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(notificacion.entidad_emite, 'Juzgado Civil')
-        self.assertEqual(notificacion.recepcionista, 'amanda')
-        self.assertEqual(notificacion.colaborador_nombre, 'juan')
+        mock_send.assert_called_once()
+
+        self.assertEqual(response.data['status'], 'Notification sent successfully')
+
+    @patch('yourapp.views.notificationapi.send')  
+    def test_post_notification_failure(self, mock_send):
+        data = {
+            "received_date": "2025-04-07",
+            "received_time": "09:45",
+            "issuing_entity": "Juzgado Primero Civil",
+            "case_number": "EXP-2025-04567",
+            "recipient": "Lic. Mariana López",
+            "receptionist": "Amanda González",
+            "internal_delivery_time": "10:15",
+            "internal_collaborator": ["Carlos Méndez"],
+            "final_delivery_datetime": ["2025-04-07T10:30:00"]
+        }
+
+        mock_send.side_effect = Exception("API request failed")
+
+        response = self.client.post(self.url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        self.assertEqual(response.data['status'], 'Failed to send notification')
