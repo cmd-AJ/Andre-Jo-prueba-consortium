@@ -4,6 +4,9 @@ from rest_framework import status
 import os
 import asyncio 
 from notificationapi_python_server_sdk import notificationapi
+from spending_control.models import Spending
+from liquidations.models import Liquidation
+from django.core import serializers
 
 NOTIFICATIONAPI_CLIENT_ID=os.getenv("NOTIFICATIONAPI_CLIENT_ID")
 NOTIFICATIONAPI_CLIENT_SECRET=os.getenv("NOTIFICATIONAPI_CLIENT_SECRET")
@@ -114,3 +117,57 @@ class ServerAliveView(APIView):
     
 
 
+
+class SpendingListView(APIView):
+    def get(self, request, format=None):
+        # Fetch all spendings
+        spendings = Spending.objects.all()
+
+        # Manually format the queryset into a list of dictionaries
+        spendings_data = []
+        for spending in spendings:
+            spendings_data.append({
+                'id': spending.id,
+                'created_by': spending.created_by.id,  # assuming creator is a ForeignKey
+                'created_at': spending.created_at,
+                'liquidation_sent': spending.liquidation_sent.url if spending.liquidation_sent else None,
+                'account_status': spending.account_status.url if spending.account_status else None,
+                'invoice': spending.invoice.url if spending.invoice else None,
+                'type': spending.type,
+                'status': spending.status,
+                'totals_match': spending.totals_match,
+                'justification': spending.justification,
+            })
+
+        # Return the manually formatted data in the response
+        return Response(spendings_data)
+
+
+class LiquidationListView(APIView):
+    def get(self, request, *args, **kwargs):
+        # Query all liquidations
+        liquidations = Liquidation.objects.all()
+        
+        # Create a list of dictionaries to return USE FOR JSONARRAY
+        liquidation_data = []
+        for liquidation in liquidations:
+            liquidation_data.append({
+                "id": liquidation.id,
+                "created": liquidation.created,
+                "creator": liquidation.creator.id, 
+                "document_type_code": liquidation.document_type_code,
+                "invoice_nit": liquidation.invoice_nit,
+                "invoice_serie": liquidation.invoice_serie,
+                "invoice_number": liquidation.invoice_number,
+                "invoice_name": liquidation.invoice_name,
+                "invoice_adress": liquidation.invoice_adress,
+                "total_value": str(liquidation.total_value),  
+                "description": liquidation.description,
+                "document_link": liquidation.document_link,
+                "state": liquidation.get_state_display(), 
+                "is_devolution": liquidation.is_devolution,
+                "elimination_reason": liquidation.elimination_reason,
+                "document": liquidation.document.url if liquidation.document else None, 
+            })
+        
+        return Response(liquidation_data, status=status.HTTP_200_OK)

@@ -43,9 +43,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "notifreception",
-    "rest_framework"
+    "rest_framework",
+    "liquidations",
+    "spending_control",
+    'corsheaders'
     
 ]
+
+FIXTURE_DIRS = [
+    os.path.join(BASE_DIR, 'db'),
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'ConsortBack.urls'
@@ -83,8 +92,12 @@ WSGI_APPLICATION = 'ConsortBack.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'consortium',  # Replace with your database name
+        'USER': 'postgres',  # Replace with your PostgreSQL username
+        'PASSWORD': 'pastpassword',  # Replace with your PostgreSQL password
+        'HOST': '3.147.6.53',  # Or the IP of the machine where PostgreSQL is running
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
 
@@ -131,3 +144,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+
+#Permite or allows to origins from any other domains such as my frontend
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-csrftoken',
+
+]
