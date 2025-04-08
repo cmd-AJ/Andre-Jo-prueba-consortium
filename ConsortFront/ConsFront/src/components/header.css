@@ -1,0 +1,126 @@
+.header-title{
+    background-color: white;
+    color: rgb(0, 0, 0);
+    font-family: sans-serif;
+    width: 100%; 
+    text-align: center;
+}
+
+
+.custom-header{
+    background-color: white;
+    color: rgb(0, 0, 0);
+    display: flex;
+    font-family: sans-serif;
+    width: 100%; 
+    border-bottom: 4px solid black;
+
+}
+
+.fecharecept {
+    display: flex;
+    flex-direction: column; /* Stack label and input vertically */
+    align-items: flex-end; /* Align content to the left (optional) */
+    margin-bottom: 1rem;
+    margin-right: 2vw;
+  }
+  
+  /* Label styles */
+  .labelrecept {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 2.2vh;
+  }
+  
+  /* Input styles */
+  .inputrecept {
+    padding: 0.6rem;
+    font-size: 2.5vh;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* or any specific width */
+    box-sizing: border-box;
+    margin-right: 0; /* Reset margin if needed */
+  }
+
+.input-label{
+    font-size: large;
+    opacity: 70%;
+}
+
+.input-field{
+    height: 5vh;
+    font-size: large;
+    margin-right: 0.25%;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+}
+
+.entity{
+  height: 4vh;
+  width: 26vw;
+  font-size: large;
+  margin-left: 1vh;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 1%;
+}
+  
+
+.input-box{
+    height: 5vh;
+    width: 13 vw;
+    font-size: large;
+    margin-left: 1vh;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.guardar{
+  background-color: rgb(37, 124, 225);
+  width: 25%;
+  height: 4vh;
+  border-radius: 8px;
+}
+
+.containerforms {
+  background-color: rgb(37, 124, 225);
+  display: flex;
+  gap: 2rem; /* Space between the columns */
+  height: 88vh;
+}
+
+.listnotifs{
+  background-color: rgb(37, 124, 225);
+  border-right: 4px solid rgba(27, 27, 27, 0.788);
+  width: 40%;
+  height:100%;
+}
+
+
+.subtitle{
+  background-color:  rgb(37, 124, 225);
+  font-size: xx-large;
+  text-align: center;
+  color: white;
+}
+
+.buttoncheck{
+  background-color: white;
+  color: black;
+  border: 3px solid white;
+  text-align: center;
+  height: 10vh;
+  font-size: x-large;
+  width: 100%;
+
+}
