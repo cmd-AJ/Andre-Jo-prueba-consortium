@@ -7,7 +7,7 @@ class SingleAttributeTestCase(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.url = '/echos/'  # The endpoint for testing
+        self.url = '/send_notif/'  # The endpoint for testing
 
     @patch('yourapp.views.notificationapi.send')  # Mock the external API call
     def test_post_notification(self, mock_send):
