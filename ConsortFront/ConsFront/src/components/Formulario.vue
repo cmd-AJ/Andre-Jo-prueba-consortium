@@ -119,7 +119,7 @@ const form = reactive({
 // Fetch user data
 async function fetchData() {
   try {
-    const response = await fetch("http://127.0.0.1:8000/api/users/") // adjust this to your actual endpoint
+    const response = await fetch("http://3.147.6.53:8000/api/users/") // adjust this to your actual endpoint
     if (!response.ok) {
       throw new Error('Error fetching data')
     }
@@ -134,7 +134,7 @@ async function fetchData() {
 // Fetch notifications data
 async function fetchNotifications() {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/getnotification/') // Change to your endpoint
+    const response = await fetch('http://3.147.6.53:8000/api/getnotification/') // Change to your endpoint
     if (!response.ok) throw new Error('Failed to fetch notifications')
     const data = await response.json()
     notifications.value = data
@@ -147,7 +147,7 @@ async function fetchNotifications() {
 //sends mail need also database insertion
 async function sendmail() {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/sendmail/', {
+    const response = await fetch('http://3.147.6.53:8000/api/sendmail/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ async function sendmail() {
 //sends mail need also database insertion
 async function send_to_db() {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/send_notif/', {
+    const response = await fetch('http://3.147.6.53:8000/api/send_notif/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
